@@ -1,6 +1,8 @@
 #R data handling
 #1.1
 rm(list = ls())
+Sys.setlocale("LC_ALL", "en_US.UTF-8") # 한글 인식
+getwd() #디렉토리 확인
 cow <- read.csv("cow_data (1).csv", header = T)
 cow <- na.omit(cow)
 library(dplyr)
@@ -17,10 +19,13 @@ cow <- cow %>% mutate("도/시/군" = ifelse(substr(address,4,4) == " ", substr(
 # 도/시/군이 빈칸으로 띄워져 있다는 것을 이용해서 만든 알고리즘
 # ex) 경기도 안성시하면 4번째 칸이 빈칸이니까 1부터 7까지 추출하면 경기도 안성시만 뽑을 수 있음
 cow.0 <- subset(cow, substr(cow$`도/시/군`, 3, 4) != "특별")
+# 이 알고리즘을 사용할 경우 세종특별자치시, 등등이 뽑히기 때문에 우리 행정 자치에 특별시는 특별만 들어가기 때문에
+# 특별이라는 단어가 들어간 친구들만 제외하면 평범한 도/시/군으로 추출가능
 cow.1 <- subset(cow.0, grade == "1++")
 tab <- table(cow.1$"도/시/군")
 tab.1 <- sort(tab, decreasing = T)
 count <- head(tab.1, 3)
+print(count)
 
 #1.3
 region.name <- names(count)
