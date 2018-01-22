@@ -245,4 +245,3 @@ rowchange <- function(a) {
   }
   return(a)
 }
-## 실습용
