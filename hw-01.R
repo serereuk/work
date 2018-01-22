@@ -4,17 +4,18 @@ rm(list = ls())
 cow <- read.csv("cow_data (1).csv", header = T)
 cow <- na.omit(cow)
 library(dplyr)
-edible <- function(x) {
+edible <- function(x) { # 기존 정보에 새로운 데이터 열인 edible 열을 만듦 #
   x %>% mutate(is_edible = ifelse(age >= 50 & (grade == "3" | grade == "등외"),
                                   "폐기용", "식용"))
 }
 cow <- edible(cow)
 head(cow, 6)
+
 #1.2
-library(stringr)
 cow <- cow %>% mutate("도/시/군" = ifelse(substr(address,4,4) == " ", substr(address, 1, 7),
                                        ifelse(substr(address, 6, 6) == " ", substr(address, 1, 10), substr(address, 1, 8))))
-
+# 도/시/군이 빈칸으로 띄워져 있다는 것을 이용해서 만든 알고리즘
+# ex) 경기도 안성시하면 4번째 칸이 빈칸이니까 1부터 7까지 추출하면 경기도 안성시만 뽑을 수 있음
 cow.0 <- subset(cow, substr(cow$`도/시/군`, 3, 4) != "특별")
 cow.1 <- subset(cow.0, grade == "1++")
 tab <- table(cow.1$"도/시/군")
